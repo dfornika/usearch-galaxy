@@ -1,0 +1,87 @@
+<tool id="usearch_fastx_uniques" name="usearch fastx_uniques" version="1.0.0">
+  <description>Remove duplicate sequences</description>
+  <command>
+    #if [ $output-mode == "fasta" ]
+      usearch -fastx_uniques $input -fastaout $output -sizeout
+    #elif [ $output-mode == "fastq" ]
+      usearch -derep_prefix $input -fastqout $output -sizeout
+    #else
+      echo 'Unrecognised mode:' $output-mode;
+      echo '  [fasta|fastq] only';
+    #end if
+  </command>
+  <inputs>
+    <param name='input' type='data' format='fasta' label='Input sequence file' />
+    <param name='relabel' type='text' optional="true" label='Relabel String' />
+    <param name='output-mode' type='select' label='Output Format'>
+      <option value='fasta'>FASTA</option>
+      <option value='fastq'>FASTQ</option>
+    </param>
+  </inputs>
+
+  <outputs>
+    <data name='output' format="${output-mode.value}}" />
+  </outputs>
+
+  <help>
+===========
+Description
+===========
+
+Removes duplicate sequences from the Usearch-Tool-Suite_.
+
+.. _Usearch-Tool-Suite: http://www.drive5.com/usearch/
+
+-----
+
+-----
+Input
+-----
+
+File of reads in FASTA or FASTQ format.
+
+----------
+Parameters
+----------
+
+Output Format
+  File format for the output file (FASTQ or FASTA)
+Relabel String
+  A string that is used to re-label the dereplicated sequences. An integer is appended to the label. e.g. "Uniq" will generate sequences labels Uniq1, Uniq2 ... etc. If no Relabel String is provided, the label of the first occurrence of the sequence is used.
+
+------
+Output
+------
+
+A FASTA or FASTQ file containing only unique sequences. The identifier line for each sequence states the representative sequence followed by the number of identical sequences found.
+
+e.g. >[Relabel String]XXXX;size=1443;
+
+[Relabel String]XXXX is the representative of 1443 identical sequences.
+
+-----
+
+=========
+Resources
+=========
+
+Dereplication_
+
+.. _fastx_uniques: http://drive5.com/usearch/manual/dereplication.htmlhttps://www.drive5.com/usearch/manual/cmd_fastx_uniques.html
+
+**Author**
+
+Robert C. Edgar (bob@drive5.com)
+
+**Wrapper Author**
+
+Dan Fornika (dan.fornika@bccdc.ca)
+  </help>
+  <tests>
+    <test>
+    	<param name="input" value="seqs.fasta" />
+    	<param name="output-mode" value="fasta" />
+    	<output name="output" file="seqs_unique.fasta" ftype="fasta" lines_diff="10" />
+    </test>
+  </tests>
+</tool>
