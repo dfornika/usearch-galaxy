@@ -1,0 +1,7 @@
+name: usearch_fastx_uniques
+owner: dfornika
+description: Remove duplicate sequences
+homepage_url: https://github.com/dfornika/usearch-galaxy/tree/master/usearch_fastx_uniques
+long_description: 
+remote_repository_url: https://github.com/dfornika/usearch-galaxy.git
+type: unrestricted
