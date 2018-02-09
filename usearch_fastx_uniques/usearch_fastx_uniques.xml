@@ -1,14 +1,22 @@
 <tool id="usearch_fastx_uniques" name="usearch fastx_uniques" version="1.0.0">
   <description>Remove duplicate sequences</description>
   <command>
+    usearch
+    -fastx_uniques
+    $input
     #if [ $output_format == "fasta" ]
-      usearch -fastx_uniques $input -fastaout $output -sizeout 2&gt;1;
+      -fastaout
     #elif [ $output_format == "fastq" ]
-      usearch -derep_prefix $input -fastqout $output -sizeout 2&gt;1;
+      -fastqout
     #else
       echo 'Unrecognised format:' $output_format;
       echo '  [fasta|fastq] only';
     #end if
+    #if $relabel
+      -relabel $relabel
+    #end if
+    $output
+    -sizeout 2&gt;1;
   </command>
   <inputs>
     <param name='input' type='data' format='fasta' label='Input sequence file' />
